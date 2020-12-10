@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,16 @@ namespace dotnetmicroservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // services.AddConnections()
+            using (var db = new ApiDbContext(Configuration)) 
+            {
+                var rng = new Random();
+                db.Add(new Robot { 
+                    positionX = rng.Next(-1000, 1000),
+                    positionY = rng.Next(-1000, 1000)
+                });
+                db.SaveChanges();
+            }
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
